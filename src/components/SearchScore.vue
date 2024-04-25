@@ -14,22 +14,20 @@ const message = useMessage()
 
 const teacherName = ref('')
 const courseName = ref('')
-onMounted(() => {
+const onClickSubmit = () => {
+  const token = globalToken.value
+  webGetScoreInfos(teacherName.value,
+      courseName.value, token).then((res) => {
+    scoreInfos.value = res.data as ScoreInfo[]
+  }).catch((err) => {
 
-  const token = localStorage.getItem(tokenKey)
-  if (token == null || token == '') {
-    const openid = localStorage.getItem(openidKey)
-    if (openid == null || openid == '') {
-      message.error("自动登录失败，请重新验证！")
-      pageNum.value = 0
-      return
-    }
-    return;
-  }
+    message.error(err,{
+      closable: true,
+      duration: 3000
+    })
 
-  globalToken.value = token
-
-})
+  })
+}
 </script>
 
 <template>
@@ -47,10 +45,11 @@ onMounted(() => {
         课程名
       </template>
     </n-input>
-    <n-button type="primary" size="large" style="margin-top: 2vw;">查询</n-button>
+    <n-button type="primary" size="large" style="margin-top: 2vw;"
+              @click="onClickSubmit">查询
+    </n-button>
 
   </n-form>
-
 
 
   <div v-for="(info,index) in scoreInfos" :key="index">

@@ -6,11 +6,34 @@ import SearchScore from "./SearchScore.vue";
 
 const message = useMessage()
 
-import {ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {TabsInst} from "naive-ui";
+import {autoLogin} from "../api/globalFunc.ts";
 
 const tabsInstRef = ref<TabsInst | null>(null)
 
+onMounted(() => {
+  autoLogin().then((res) => {
+    if (res) {
+      message.success("自动登陆成功！", {
+        closable: true,
+        duration: 3000
+      })
+      isLogin.value = true
+    } else {
+      message.error("自动登陆失败！", {
+        closable: true,
+        duration: 3000
+      })
+
+      isLogin.value = false
+      pageNum.value = 0
+
+    }
+
+
+  })
+})
 const handleBeforeLeave = (tabName: number) => {
   if (tabName !== 0 && !isLogin.value) {
     message.error("请先登录~", {
@@ -48,7 +71,7 @@ const handleBeforeLeave = (tabName: number) => {
 
         </n-tab-pane>
         <n-tab-pane :name="1" tab="查询">
-          <SearchScore />
+          <SearchScore/>
 
         </n-tab-pane>
         <n-tab-pane :name="2" tab="上传">
