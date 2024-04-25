@@ -1,17 +1,19 @@
 /*清除浏览器自带的样式*/
-body{
+html, body {
     margin: 0;
 }
 
 html,
 body {
-    height: 100%;
+    /*height: 100%;*/
+    /*min-height: max-content; !* 超出后自动延伸背景 *!*/
+    min-height: 100vh;
     background-color: #333;
 }
 
 body {
     display: -ms-flexbox;
-    display: flex;
+    /*display: flex;*/
     color: #fff;
     text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
     box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
