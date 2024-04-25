@@ -3,6 +3,9 @@ import {reactive, ref} from "vue";
 import {FormInst, FormItemRule, FormRules} from "naive-ui";
 
 import {useMessage} from 'naive-ui'
+import {webPostAuth} from "../api/auth.ts";
+import {tokenExpireKey, tokenKey} from "../api/globalConst.ts";
+import AuthMsg = Items.AuthMsg;
 
 const message = useMessage()
 const formRef = ref<FormInst | null>(null)
@@ -17,7 +20,7 @@ const rules: FormRules = {
   code: [
     {
       required: true,
-      validator(rule: FormItemRule, value: string) {
+      validator(_: FormItemRule, value: string) {
         console.log(value)
         if (!value) {
           return new Error('请输入内测码')
@@ -30,13 +33,20 @@ const rules: FormRules = {
 }
 
 
-const onSubmit = (e: MouseEvent)=> {
+const onSubmit = (e: MouseEvent) => {
   e.preventDefault()
   formRef.value?.validate((errors) => {
     if (!errors) {
 
-      //
-      message.success('验证成功')
+      webPostAuth(model.code).then((res) => {
+        const d = res.data as AuthMsg
+        localStorage.setItem(tokenKey, d.token)
+        localStorage.setItem(tokenExpireKey, new Date(d.expirationAt).getTime().toString())
+        message.success('验证成功')
+
+      }).catch((err) => {
+        message.error(err)
+      })
 
     } else {
       console.log(errors)

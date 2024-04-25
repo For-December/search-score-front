@@ -5,3 +5,5 @@ export const baseURL =
 'http://localhost:8098'
 
 
+export const tokenKey = "SEARCH_SCORE_TOKEN"
+export const tokenExpireKey = "SEARCH_SCORE_EXPIRE"
