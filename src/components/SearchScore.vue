@@ -6,9 +6,8 @@ import ScoreInfo = Items.ScoreInfo;
 
 import {useMessage} from 'naive-ui'
 import {webGetScoreInfos} from "../api/scores.ts";
-import {globalToken, pageNum} from "../types/globalData.ts";
+import {globalToken, isLogin, pageNum} from "../types/globalData.ts";
 import {openidKey, tokenKey} from "../api/globalConst.ts";
-import {webPostAuth} from "../api/auth.ts";
 
 const scoreInfos = ref<ScoreInfo[]>([])
 const message = useMessage()
@@ -16,6 +15,7 @@ const message = useMessage()
 const teacherName = ref('')
 const courseName = ref('')
 onMounted(() => {
+
   const token = localStorage.getItem(tokenKey)
   if (token == null || token == '') {
     const openid = localStorage.getItem(openidKey)
@@ -48,7 +48,9 @@ onMounted(() => {
       </template>
     </n-input>
     <n-button type="primary" size="large" style="margin-top: 2vw;">查询</n-button>
+
   </n-form>
+
 
 
   <div v-for="(info,index) in scoreInfos" :key="index">
