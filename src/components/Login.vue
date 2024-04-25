@@ -4,8 +4,9 @@ import {FormInst, FormItemRule, FormRules} from "naive-ui";
 
 import {useMessage} from 'naive-ui'
 import {webPostAuth} from "../api/auth.ts";
-import {tokenExpireKey, tokenKey} from "../api/globalConst.ts";
+import {openidKey, tokenExpireKey, tokenKey} from "../api/globalConst.ts";
 import AuthMsg = Items.AuthMsg;
+import {pageNum} from "../types/globalData.ts";
 
 const message = useMessage()
 const formRef = ref<FormInst | null>(null)
@@ -42,7 +43,9 @@ const onSubmit = (e: MouseEvent) => {
         const d = res.data as AuthMsg
         localStorage.setItem(tokenKey, d.token)
         localStorage.setItem(tokenExpireKey, new Date(d.expirationAt).getTime().toString())
-        message.success('验证成功')
+        message.success('验证登录成功！')
+        localStorage.setItem(openidKey, model.code)
+        pageNum.value = 1
 
       }).catch((err) => {
         message.error(err)

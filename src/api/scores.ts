@@ -1,8 +1,7 @@
 import {request} from "./myAxois";
-import SearchReq = Items.SearchReq;
 import TransDef = Items.TransDef;
 
-export const webGetScoreInfos = (teacherName: string, courseName: string)
+export const webGetScoreInfos = (teacherName: string, courseName: string, auth: string)
     : Promise<TransDef> => {
     return request({
         method: 'POST',
@@ -10,6 +9,9 @@ export const webGetScoreInfos = (teacherName: string, courseName: string)
         data: {
             teacherName: teacherName,
             courseName: courseName,
+        },
+        headers: {
+            "Authorization": auth
         }
     })
 };
