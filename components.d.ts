@@ -13,5 +13,7 @@ declare module 'vue' {
     NLayoutContent: typeof import('naive-ui')['NLayoutContent']
     NLayoutFooter: typeof import('naive-ui')['NLayoutFooter']
     NLayoutHeader: typeof import('naive-ui')['NLayoutHeader']
+    NMessageProvider: typeof import('naive-ui')['NMessageProvider']
+    SearchScore: typeof import('./src/components/SearchScore.vue')['default']
   }
 }

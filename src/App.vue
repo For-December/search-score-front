@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import SearchScore from './components/SearchScore.vue'
 </script>
 
 <template>
-  <HelloWorld />
+  <n-message-provider>
+    <SearchScore />
+  </n-message-provider>
 </template>
 
 <style scoped>
