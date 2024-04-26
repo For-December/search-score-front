@@ -1,13 +1,14 @@
 <script setup lang="ts">
 // defineProps<{ msg: string }>()
 
-import {onMounted, ref} from "vue";
-import ScoreInfo = Items.ScoreInfo;
+import {ref} from "vue";
 
 import {useMessage} from 'naive-ui'
 import {webGetScoreInfos} from "../api/scores.ts";
-import {globalToken, isLogin, pageNum} from "../types/globalData.ts";
-import {openidKey, tokenKey} from "../api/globalConst.ts";
+import {globalToken} from "../types/globalData.ts";
+import {autoLogin} from "../api/globalFunc.ts";
+import ScoreInfo = Items.ScoreInfo;
+import TransDef = Items.TransDef;
 
 const scoreInfos = ref<ScoreInfo[]>([])
 const message = useMessage()
@@ -18,13 +19,28 @@ const onClickSubmit = () => {
   const token = globalToken.value
   webGetScoreInfos(teacherName.value,
       courseName.value, token).then((res) => {
-    scoreInfos.value = res.data as ScoreInfo[]
-  }).catch((err) => {
+    scoreInfos.value.length = 0
+    const d = res.data as ScoreInfo[]
+    d.forEach(t => scoreInfos.value.push(t))
+  }).catch((err: TransDef) => {
 
-    message.error(err,{
-      closable: true,
-      duration: 3000
-    })
+    if (err.code === 401) {
+      autoLogin().then((res) => {
+        if (res) {
+          message.success('token自动续签成功,请重新查询', {
+            closable: true,
+            duration: 3000
+          })
+
+        }
+      })
+      return
+    } else {
+      message.error(err.msg, {
+        closable: true,
+        duration: 3000
+      })
+    }
 
   })
 }
@@ -54,10 +70,12 @@ const onClickSubmit = () => {
 
   <div v-for="(info,index) in scoreInfos" :key="index">
     <div class="card mx-auto" style="color: black;white-space: pre-line;background:#adccfd;width: 18rem;;">
-      <p>{{ info.courseName }}-{{ info.teacher }}</p>
-
+      <p>{{ info.courseName }} {{ info.teacher }}</p>
       <div v-for="(score,i) in info.scores" :key="i">
-        {{ score.scoreRange }}-{{ score.numberOfStudents }}
+        {{ score.scoreRange }}： {{ 1.0 * score.numberOfStudents / info.totalStudents * 100 }}%
+      </div>
+      <div>
+        平均分：{{ info.averageScore }}
       </div>
     </div>
   </div>

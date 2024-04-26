@@ -8,6 +8,7 @@ import {openidKey, tokenExpireKey, tokenKey} from "../api/globalConst.ts";
 import AuthMsg = Items.AuthMsg;
 import {isLogin, pageNum} from "../types/globalData.ts";
 import {useMessage} from 'naive-ui'
+import TransDef = Items.TransDef;
 
 const message = useMessage()
 const formRef = ref<FormInst | null>(null)
@@ -49,8 +50,8 @@ const onSubmit = (e: MouseEvent) => {
         isLogin.value=true
         pageNum.value = 1
 
-      }).catch((err) => {
-        message.error(err, {
+      }).catch((err:TransDef) => {
+        message.error(err.msg, {
           closable: true,
           duration: 3000
         })

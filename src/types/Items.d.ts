@@ -14,6 +14,7 @@ declare module Items {
         courseName: string
         scores: ScoreDetail[]
         averageScore: number
+        totalStudents: number
 
     }
 

@@ -11,7 +11,7 @@ myAxios.interceptors.response.use(
     (error = {}) => {
         const {response = {}} = error || {};
 
-        return Promise.reject(response?.data?.msg || {});
+        return Promise.reject(response?.data || {});
     }
 )
 
