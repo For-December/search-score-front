@@ -9,6 +9,7 @@ import {getGlobalToken} from "../types/globalData.ts";
 import {autoLogin} from "../api/globalFunc.ts";
 import ScoreInfo = Items.ScoreInfo;
 import TransDef = Items.TransDef;
+import {pendingOpenFuncCode} from "../api/globalConst.ts";
 
 const scoreInfos = ref<ScoreInfo[]>([])
 const message = useMessage()
@@ -26,9 +27,17 @@ const onClickSubmit = () => {
   const token = getGlobalToken()
   webGetScoreInfos(teacherName.value,
       courseName.value, token).then((res) => {
-    scoreInfos.value.length = 0
-    const d = res.data as ScoreInfo[]
-    d.forEach(t => scoreInfos.value.push(t))
+        if(res.code===200){
+          scoreInfos.value.length = 0
+          const d = res.data as ScoreInfo[]
+          d.forEach(t => scoreInfos.value.push(t))
+          return
+        }
+        if (res.code===pendingOpenFuncCode){
+          pendingOpenInfo.value = res.msg
+          showModal.value=true
+        }
+
   }).catch((err: TransDef) => {
 
     if (err.code === 401) {
@@ -51,10 +60,28 @@ const onClickSubmit = () => {
 
   })
 }
+
+const showModal = ref(false)
+
+const pendingOpenInfo = ref('')
+
 </script>
 
 <template>
   <!--  <n-button type="primary">naive-ui</n-button>-->
+
+  <n-modal :show="showModal"
+           preset="dialog"
+           title="错误提示">
+
+    <p>{{ pendingOpenInfo}}</p>
+    <p></p>
+
+
+    <n-button type="primary" style="float: right" @click="showModal=false">
+      已阅
+    </n-button>
+  </n-modal>
   <div style="margin-top: 6vw;"></div>
   <n-form>
     <n-input v-model:value="teacherName" type="text" placeholder="教师">
