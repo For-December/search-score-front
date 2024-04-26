@@ -5,7 +5,7 @@ import {ref} from "vue";
 
 import {useMessage} from 'naive-ui'
 import {webGetScoreInfos} from "../api/scores.ts";
-import {globalToken} from "../types/globalData.ts";
+import {getGlobalToken} from "../types/globalData.ts";
 import {autoLogin} from "../api/globalFunc.ts";
 import ScoreInfo = Items.ScoreInfo;
 import TransDef = Items.TransDef;
@@ -23,7 +23,7 @@ const onClickSubmit = () => {
     })
     return
   }
-  const token = globalToken.value
+  const token = getGlobalToken()
   webGetScoreInfos(teacherName.value,
       courseName.value, token).then((res) => {
     scoreInfos.value.length = 0

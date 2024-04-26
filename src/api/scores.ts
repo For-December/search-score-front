@@ -15,3 +15,14 @@ export const webGetScoreInfos = (teacherName: string, courseName: string, auth: 
         }
     })
 };
+
+export const webUploadScoreFile = (auth:string)
+    : Promise<TransDef> => {
+    return request({
+        method: 'POST',
+        url: '/user/upload',
+        headers: {
+            "Authorization": auth
+        }
+    })
+};

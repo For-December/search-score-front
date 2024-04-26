@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import {useMessage} from 'naive-ui'
 import {isLogin, pageNum} from "../types/globalData.ts";
 import Login from "./Login.vue";
 import SearchScore from "./SearchScore.vue";
 
+import {useMessage} from 'naive-ui'
 const message = useMessage()
 
-import {onMounted, ref, watch} from "vue";
+import {onMounted, ref} from "vue";
 import {TabsInst} from "naive-ui";
 import {autoLogin} from "../api/globalFunc.ts";
+import Upload from "./Upload.vue";
 
 const tabsInstRef = ref<TabsInst | null>(null)
 
@@ -75,7 +76,7 @@ const handleBeforeLeave = (tabName: number) => {
 
         </n-tab-pane>
         <n-tab-pane :name="2" tab="上传">
-
+          <Upload/>
         </n-tab-pane>
       </n-tabs>
 
