@@ -16,6 +16,13 @@ const message = useMessage()
 const teacherName = ref('')
 const courseName = ref('')
 const onClickSubmit = () => {
+  if (teacherName.value.length === 0 && courseName.value.length === 0) {
+    message.warning('请至少填写一个查询条件~', {
+      closable: true,
+      duration: 3000
+    })
+    return
+  }
   const token = globalToken.value
   webGetScoreInfos(teacherName.value,
       courseName.value, token).then((res) => {
