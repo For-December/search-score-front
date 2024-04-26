@@ -34,7 +34,7 @@ const onClickSubmit = () => {
     if (err.code === 401) {
       autoLogin().then((res) => {
         if (res) {
-          message.success('token自动续签成功,请重新查询', {
+          message.warning('token自动续签成功,请重新查询', {
             closable: true,
             duration: 3000
           })
