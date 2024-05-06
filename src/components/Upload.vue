@@ -42,6 +42,9 @@ const customRequest = ({
                          onError,
                          onProgress
                        }: UploadCustomRequestOptions) => {
+  console.log(headers)
+  console.log(withCredentials)
+  console.log(action)
   const formData = new FormData()
   if (data) {
     Object.keys(data).forEach((key) => {
