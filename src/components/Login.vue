@@ -6,7 +6,7 @@ import {FormInst, FormItemRule, FormRules} from "naive-ui";
 import {webPostAuth} from "../api/auth.ts";
 import {openidKey, tokenExpireKey, tokenKey} from "../api/globalConst.ts";
 import AuthMsg = Items.AuthMsg;
-import {isLogin, pageNum} from "../types/globalData.ts";
+import {isLogin, pageNum, setGlobalToken, setTokenExpire} from "../types/globalData.ts";
 import {useMessage} from 'naive-ui'
 import TransDef = Items.TransDef;
 
@@ -48,6 +48,8 @@ const onSubmit = (e: MouseEvent) => {
         const d = res.data as AuthMsg
         localStorage.setItem(tokenKey, d.token)
         localStorage.setItem(tokenExpireKey, new Date(d.expirationAt).getTime().toString())
+        setGlobalToken(d.token)
+        setTokenExpire(new Date(d.expirationAt).getTime())
         message.success('验证登录成功！')
         localStorage.setItem(openidKey, model.code)
         isLogin.value=true
