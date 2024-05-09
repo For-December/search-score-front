@@ -28,6 +28,9 @@ const rules: FormRules = {
         if (!value) {
           return new Error('请输入内测码')
         }
+        if (!/^[A-Za-z0-9-]+$/.test(value)){
+          return new Error('内测码格式错误，请检查是否有空格')
+        }
         return true
       },
       trigger: ['input', 'blur']
