@@ -46,11 +46,17 @@ const onSubmit = (e: MouseEvent) => {
 
       webPostAuth(model.code).then((res) => {
         const d = res.data as AuthMsg
+
+        // 本地存储
         localStorage.setItem(tokenKey, d.token)
-        localStorage.setItem(tokenExpireKey, new Date(d.expirationAt).getTime().toString())
+        localStorage.setItem(tokenExpireKey, String(d.expirationAt))
+
+        // 全局存储
         setGlobalToken(d.token)
-        setTokenExpire(new Date(d.expirationAt).getTime())
+        setTokenExpire(d.expirationAt)
         message.success('验证登录成功！')
+
+        // 把openid也存了，下次过期自动获取token
         localStorage.setItem(openidKey, model.code)
         isLogin.value=true
         pageNum.value = 1
