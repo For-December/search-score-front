@@ -18,7 +18,7 @@ export const autoLogin = async (): Promise<boolean> => {
     console.log(Number(expireKey))
 
     // 还有30s过期，就续签
-    if (new Date(Number(expireKey)).getTime() - 1000 < Date.now()) {
+    if (new Date(Number(expireKey)).getTime() - 1000 < new Date().getTime()) {
         // 自动续签
         try {
             let res = await webPostAuth(openid);
@@ -37,7 +37,7 @@ export const autoLogin = async (): Promise<boolean> => {
     } else {
 
         console.log(new Date(Number(expireKey)).getTime())
-        console.log(Date.now())
+        console.log(new Date().getTime())
         console.log("直接获取，无需续签")
         setGlobalToken(token)
         setTokenExpire(new Date(Number(expireKey)).getTime())
