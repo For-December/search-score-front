@@ -1,8 +1,8 @@
 
 
 export const baseURL =
-    // window.location.origin;
-'http://localhost:8098'
+    window.location.origin;
+// 'http://localhost:8098'
 
 
 export const tokenKey = "SEARCH_SCORE_TOKEN"
