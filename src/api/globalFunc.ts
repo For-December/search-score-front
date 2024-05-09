@@ -16,18 +16,23 @@ export const autoLogin = async (): Promise<boolean> => {
 
 
     console.log(Number(expireKey))
+    console.log(new Date().getTime() / 1000)
+
 
     // 还有30s过期，就续签
-    if (new Date(Number(expireKey)).getTime() - 1000 < new Date().getTime()) {
+    if (Number(expireKey) - 30 < new Date().getTime() / 1000) {
         // 自动续签
         try {
             let res = await webPostAuth(openid);
             const msg = res.data as AuthMsg
+
+            // 本地存储
+            localStorage.setItem(tokenKey, msg.token)
+            localStorage.setItem(tokenExpireKey, String(msg.expirationAt))
+
+            // 全局变量
             setGlobalToken(msg.token)
-            localStorage.setItem(tokenExpireKey, msg.token)
-            const tokenExpire: number = new Date(msg.expirationAt).getTime()
-            localStorage.setItem(tokenExpireKey, tokenExpire.toString())
-            setTokenExpire(tokenExpire)
+            setTokenExpire(msg.expirationAt)
             console.log(msg)
             return true
         } catch (err) {
@@ -36,11 +41,11 @@ export const autoLogin = async (): Promise<boolean> => {
         }
     } else {
 
-        console.log(new Date(Number(expireKey)).getTime())
-        console.log(new Date().getTime())
-        console.log("直接获取，无需续签")
+        console.log(Number(expireKey))
+        console.log(new Date().getTime() / 1000)
+        console.log("token未过期，直接获取，无需续签")
         setGlobalToken(token)
-        setTokenExpire(new Date(Number(expireKey)).getTime())
+        setTokenExpire(Number(expireKey))
         // console.log(expireKey)
         // console.log(new Date(Number(expireKey)).getTime())
         // console.log(Date.now())
